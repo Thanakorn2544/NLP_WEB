@@ -32,6 +32,20 @@
                     <p>คำที่คุณค้นหา <strong>{{key_word}}</strong> <font color="red">ไม่ผมคำนี้ในเอกสาร</font></ย>
                     <hr>
                 {% endif %}
+                <form action="/fake_news_detection" method="POST" enctype="multipart/form-data">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control form-control-lg" placeholder="พิมพ์ข้อความเพื่อเช็คว่าข่าวจริงหรือปลอม" aria-label="พิมพ์ข้อความเพื่อเช็คว่าข่าวจริงหรือปลอม" aria-describedby="button-addon2" name="text_new" multiple>
+                        <input type="submit" value="เช็คข่าว" class="btn btn-outline-success" id="button-addon2">
+                    </div>
+                </form>
+                <hr>
+                {% if bool_news == True %}
+                    <p>ข่าวนี้เป็น <font color="green">ข่าวจริง</font></p>
+                    <hr>
+                {% elif bool_news == False %}
+                    <p>ข่าวนี้เป็น <font color="red">ข่าวปลอม</font></ย>
+                    <hr>
+                {% endif %}
                 <h4>TOP 5 TYPE BOW</h4>
                 <ol>
                     {% if bo == True %}
