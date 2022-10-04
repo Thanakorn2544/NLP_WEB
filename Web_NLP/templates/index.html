@@ -25,32 +25,22 @@
                     </div>
                 </form>
                 <hr>
-                {% if bool_search == True %}
-                    <p>คำที่คุณค้นหา <strong>{{key_word}}</strong> <font color="green">พบคำนี้ในเอกสาร</font></p>
-                    <hr>
-                {% elif bool_search == False %}
-                    <p>คำที่คุณค้นหา <strong>{{key_word}}</strong> <font color="red">ไม่ผมคำนี้ในเอกสาร</font></ย>
-                    <hr>
-                {% endif %}
+                <p><strong>{{}}</strong> </p>
+                <hr>
                 <form action="/fake_news_detection" method="POST" enctype="multipart/form-data">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control form-control-lg" placeholder="พิมพ์ข้อความเพื่อเช็คว่าข่าวจริงหรือปลอม" aria-label="พิมพ์ข้อความเพื่อเช็คว่าข่าวจริงหรือปลอม" aria-describedby="button-addon2" name="text_new" multiple>
+                        <input type="text" class="form-control form-control-lg" placeholder="พิมพ์ข้อความเพื่อเช็คว่าข่าวจริงหรือปลอม" aria-label="พิมพ์ข้อความเพื่อเช็คว่าข่าวจริงหรือปลอม" aria-describedby="button-addon2" name="text_news" multiple>
                         <input type="submit" value="เช็คข่าว" class="btn btn-outline-success" id="button-addon2">
                     </div>
                 </form>
                 <hr>
-                {% if bool_news == True %}
-                    <p>ข่าวนี้เป็น <font color="green">ข่าวจริง</font></p>
-                    <hr>
-                {% elif bool_news == False %}
-                    <p>ข่าวนี้เป็น <font color="red">ข่าวปลอม</font></ย>
-                    <hr>
-                {% endif %}
+                    <strong> เป็นข่าว {{show_news}}</strong>
+                <hr>
                 <h4>TOP 5 TYPE BOW</h4>
                 <ol>
-                    {% if bo == True %}
-                        {% for word_id, word_count in top_word %}
-                            <li>{{dictionary.get(word_id)}} พบ {{word_count}} คำ</li>
+                    {% if top_word %}
+                        {% for i in top_word %}
+                            <li> {{i}} </li>
                         {% endfor %}
                     {% else %}
                     <div class="spinner-grow text-primary"></div>
@@ -63,10 +53,10 @@
                 <hr>
                 <h4>TOP 5 TYPE TF IDF</h4>
                 <ol>
-                    {% if bo == True %}
-                    {% for i in top_tfidf %}
-                        <li> {{i}} </li>
-                    {% endfor %}
+                    {% if top_tfidf %}
+                        {% for i in top_tfidf %}
+                            <li> {{i}} </li>
+                        {% endfor %}
                     {% else %}
                     <div class="spinner-grow text-primary"></div>
                     <div class="spinner-grow text-success"></div>
@@ -81,8 +71,8 @@
                 <div>
                     <h3><strong>---> Name Entity In Text <---</strong></h3>
                     <hr>
-                    {% if bo == True %}
-                        {{ result_spy|markdown }}
+                    {% if result_spy %}
+                        {{ result_spy }}
                     {% else %}
                     <img src="{{url_for('static', filename='slime.gif')}}" />
                     <!-- <div id="demo" class="carousel slide" data-bs-ride="carousel">

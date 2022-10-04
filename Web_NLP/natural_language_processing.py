@@ -5,7 +5,7 @@ from nltk.corpus import stopwords
 from gensim.corpora.dictionary import Dictionary
 from collections import defaultdict
 import os, shutil
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, Markup
 from werkzeug.utils import secure_filename
 import itertools
 import spacy
@@ -101,19 +101,33 @@ class process:
 
         result = dictionary.get(wordid)
         if result:
-            return result,count_of_word
+            return 'เพบคำนี้ ',result,' มีจำนวน ',count_of_word, ' คำ'
         else:
-            return '',0
+            return 'ไม่พบคำนี้'
             #return f'Couldn\'t find the word {word} in the entire article.'
 
-    def name_entity_recognition(self,textlist):
-        nlp = spacy.load('en_core_web_sm')
-
-        NERhteml = []
-        for text in textlist:
-            doc = nlp(text)
-            NERhteml.append(displacy.render(doc, style="ent"))
-        return NERhteml
+    def name_entity_recognition(self):
+        nlp = spacy.load("en_core_web_sm")
+        files = request.files.getlist('file_name')
+        articles = []
+        for file in files:
+            filename = secure_filename(file.filename)
+            path = f"{str(pathlib.Path(__file__).parent.resolve().as_posix())}/uploads/{filename}"
+            f = open(path,"r")
+            article = f.read()
+            tokens = word_tokenize(article)
+            lower_tokens = [t.lower() for t in tokens]
+            alpha_only = [t for t in lower_tokens if t.isalpha()]
+            no_stops = [t for t in alpha_only if t not in stopwords.words('english')]
+            wordnet_lemmatizer = WordNetLemmatizer()
+            lemmatized = [wordnet_lemmatizer.lemmatize(t) for t in no_stops]
+            articles.append(lemmatized)
+            doc = nlp(article)
+            text_html = displacy.render(doc, style="ent", page="true")
+            text_html = text_html.replace("\n\n","\n")
+            text_html = text_html.replace("<!DOCTYPE html>","")
+            result_spy += text_html
+        return Markup(result_spy)
     
     def fake_news_detection(self,news,convert_to_label=False):
         model_path = f"{str(pathlib.Path(__file__).parent.resolve().as_posix())}/model/fake-news-bert-base-uncased"
