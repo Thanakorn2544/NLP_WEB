@@ -19,9 +19,9 @@ class process:
         self.preprocessed = self.preprocess()
     
     def preprocess(self):
-        file = request.files.getlist('file_name')
+        files = request.files.getlist('file_name')
         articles = []
-        for article in textList:
+        for file in files:
             filename = secure_filename(file.filename)
             path = f"{str(pathlib.Path(__file__).parent.resolve().as_posix())}/uploads/{filename}"
             f = open(path,"r")

@@ -18,9 +18,9 @@ def index():
 @app.route("/upload_file", methods=["GET","POST"])
 def upload_file():
     if request.method == 'POST' and len(request.files.getlist('file_name')) != 0:
-        process = pro(request.files.getlist('file_name'))
+        process = pro()
         process.clear_folder_uploads()
-        process.upload_file(request.files.getlist('file_name'))
+        process.upload_file()
         process.preprocessed()
 
 
