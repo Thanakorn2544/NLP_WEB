@@ -16,10 +16,9 @@ import pathlib
 
 class process:
     def __init__(self, filename):
-        self.save_file(filename)
         self.preprocessed = self.preprocess(filename)
     
-    def preprocess(self,filename):
+    def preprocess(filename):
         files = filename
         articles = []
         for file in files:
@@ -111,7 +110,6 @@ class process:
         nlp = spacy.load("en_core_web_sm")
         files = request.files.getlist('file_name')
         articles = []
-        result_spy = ""
         for file in files:
             filename = secure_filename(file.filename)
             path = f"{str(pathlib.Path(__file__).parent.resolve().as_posix())}/uploads/{filename}"
@@ -152,11 +150,4 @@ class process:
         else:
             return int(probs.argmax())
 
-    def sentiment(self,text):
-        # Create a textblob object
-        blob = TextBlob(text)
-
-        # Print out its sentiment
-        print(blob.sentiment)
-
-        return blob.sentiment
+pro = process()
